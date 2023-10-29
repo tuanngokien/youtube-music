@@ -149,26 +149,8 @@ window.onload = function() {
           alert('Invalid YouTube link! Please enter a valid link.'); // Display an error message for an invalid link
         }
       });
-
-      // SHOW RECENT VIDEOS
-      var recentVideo = document.getElementById('recent-video');
-      recentVideo.innerHTML = '';
-      // Retrieve the recent videos from local storage
-      var recentVideos = JSON.parse(localStorage.getItem('recentVideos'));
-
-      if (recentVideos && recentVideos.length > 0) {
-        // Display the titles and links of the recently played videos
-        var recentVideosHtml = 'Recently Played:<br>';
-
-        for (var i = 0; i < recentVideos.length; i++) {
-          recentVideosHtml += '<p><a href="?id=' + recentVideos[i].id + '">' + recentVideos[i].title + '</a></p>';
-        }
-
-        recentVideo.innerHTML = recentVideosHtml;
-      }
     }
   }else{
-
     setTimeout(() => {
       if (playerReady) {
         // Retrieve the existing recent videos from local storage
@@ -189,5 +171,22 @@ window.onload = function() {
         localStorage.setItem('recentVideos', JSON.stringify(recentVideos));
       }
     }, 3000);
+  }
+
+  // SHOW RECENT VIDEOS
+  var recentVideo = document.getElementById('recent-video');
+  recentVideo.innerHTML = '';
+  // Retrieve the recent videos from local storage
+  var recentVideos = JSON.parse(localStorage.getItem('recentVideos'));
+
+  if (recentVideos && recentVideos.length > 0) {
+    // Display the titles and links of the recently played videos
+    var recentVideosHtml = 'Recently Played:<br>';
+
+    for (var i = 0; i < recentVideos.length; i++) {
+      recentVideosHtml += '<p><a href="?id=' + recentVideos[i].id + '">' + recentVideos[i].title + '</a></p>';
+    }
+
+    recentVideo.innerHTML = recentVideosHtml;
   }
 };
