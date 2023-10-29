@@ -14,11 +14,11 @@ restart_btn.addEventListener('click', restart);
 
 loadVideo(idFromUrl());
 
-setTimeout(() => {
-  if (!playerReady) {
-    errorNotice.classList.remove('hidden');
-  }
-}, 3000);
+// setTimeout(() => {
+//   if (!playerReady) {
+//     errorNotice.classList.remove('hidden');
+//   }
+// }, 3000);
 
 function loadVideo(id) {
   videoId = id;
@@ -117,3 +117,40 @@ function show(element) {
 function fadeIn(element) {
   element.classList.add('fade-in');
 }
+
+
+
+window.onload = function() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var id = urlParams.get('id');
+
+  if (id) {
+    // Redirect to the same page with the parsed ID as a parameter
+    // window.location.href = window.location.origin + window.location.pathname + '?id=' + id;
+  }else{
+    errorNotice.classList.remove('hidden');
+    
+    // Check if the form exists
+    var form = document.querySelector('#youtube-form');
+    if (form) {
+      // Handle form submission
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from being submitted
+
+        var input = document.querySelector('#youtube-link');
+        var link = input.value.trim(); // Get the value of the input field and remove leading/trailing spaces
+
+        // Check if the link is a valid YouTube link
+        var regex = /^(https?:\/\/)?(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/;
+        var match = link.match(regex);
+
+        if (match) {
+          var videoId = match[3]; // Extract the video ID from the matched link
+          window.location.href = window.location.origin + window.location.pathname + '?id=' + videoId;
+        } else {
+          alert('Invalid YouTube link! Please enter a valid link.'); // Display an error message for an invalid link
+        }
+      });
+    }
+  }
+};
