@@ -45,7 +45,8 @@ function onPlayerStateChange(event) {
       }
       break;
     case YT.PlayerState.ENDED:
-      hide(play_btn);
+      // hide(play_btn);
+      player.playVideo(); 
       break;
   }
 }
