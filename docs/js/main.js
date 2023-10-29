@@ -168,21 +168,26 @@ window.onload = function() {
       }
     }
   }else{
-    // Retrieve the existing recent videos from local storage
-    var recentVideos = JSON.parse(localStorage.getItem('recentVideos')) || [];
 
-    // Remove the video ID if it already exists in the recent videos array
-    recentVideos = recentVideos.filter(function(item) {
-      return item.id !== videoId;
-    });
+    setTimeout(() => {
+      if (playerReady) {
+        // Retrieve the existing recent videos from local storage
+        var recentVideos = JSON.parse(localStorage.getItem('recentVideos')) || [];
 
-    // Add the new video object at the beginning of the recent videos array
-    recentVideos.unshift({ id: videoId, title: player.getVideoData().title });
+        // Remove the video ID if it already exists in the recent videos array
+        recentVideos = recentVideos.filter(function(item) {
+          return item.id !== videoId;
+        });
 
-    // Keep only the most recent 5 videos
-    recentVideos = recentVideos.slice(0, 5);
+        // Add the new video object at the beginning of the recent videos array
+        recentVideos.unshift({ id: videoId, title: player.getVideoData().title });
 
-    // Store the updated recent videos array in local storage
-    localStorage.setItem('recentVideos', JSON.stringify(recentVideos));
+        // Keep only the most recent 5 videos
+        recentVideos = recentVideos.slice(0, 5);
+
+        // Store the updated recent videos array in local storage
+        localStorage.setItem('recentVideos', JSON.stringify(recentVideos));
+      }
+    }, 3000);
   }
 };
