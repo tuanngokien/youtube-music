@@ -6,7 +6,7 @@ const title = document.querySelector('.title');
 const controls = document.querySelector('.controls');
 const play_btn = document.querySelector('.play');
 const restart_btn = document.querySelector('.restart');
-const welcome = document.querySelector('.welcome');
+// const welcome = document.querySelector('.welcome');
 const errorNotice = document.querySelector('.error-notice');
 
 play_btn.addEventListener('click', playPausePress);
@@ -25,7 +25,7 @@ function loadVideo(id) {
 
   // If no video id is provided in url
   if(videoId == null){
-    show(welcome);
+    // show(welcome);
     // Set default title
     var mTitle = document.createElement('title');
     mTitle.innerText = "YT Music Mode";
@@ -124,12 +124,10 @@ window.onload = function() {
   var urlParams = new URLSearchParams(window.location.search);
   var id = urlParams.get('id');
 
-  if (id) {
-    // Redirect to the same page with the parsed ID as a parameter
-    // window.location.href = window.location.origin + window.location.pathname + '?id=' + id;
-  }else{
+  if(videoId == null){
+    // SHOW THE FORM
     errorNotice.classList.remove('hidden');
-    
+
     // Check if the form exists
     var form = document.querySelector('#youtube-form');
     if (form) {
@@ -151,6 +149,40 @@ window.onload = function() {
           alert('Invalid YouTube link! Please enter a valid link.'); // Display an error message for an invalid link
         }
       });
+
+      // SHOW RECENT VIDEOS
+      var recentVideo = document.getElementById('recent-video');
+      recentVideo.innerHTML = '';
+      // Retrieve the recent videos from local storage
+      var recentVideos = JSON.parse(localStorage.getItem('recentVideos'));
+
+      if (recentVideos && recentVideos.length > 0) {
+        // Display the titles and links of the recently played videos
+        var recentVideosHtml = 'Recently Played:<br>';
+
+        for (var i = 0; i < recentVideos.length; i++) {
+          recentVideosHtml += '<p><a href="?id=' + recentVideos[i].id + '">' + recentVideos[i].title + '</a></p>';
+        }
+
+        recentVideo.innerHTML = recentVideosHtml;
+      }
     }
+  }else{
+    // Retrieve the existing recent videos from local storage
+    var recentVideos = JSON.parse(localStorage.getItem('recentVideos')) || [];
+
+    // Remove the video ID if it already exists in the recent videos array
+    recentVideos = recentVideos.filter(function(item) {
+      return item.id !== videoId;
+    });
+
+    // Add the new video object at the beginning of the recent videos array
+    recentVideos.unshift({ id: videoId, title: player.getVideoData().title });
+
+    // Keep only the most recent 5 videos
+    recentVideos = recentVideos.slice(0, 5);
+
+    // Store the updated recent videos array in local storage
+    localStorage.setItem('recentVideos', JSON.stringify(recentVideos));
   }
 };
